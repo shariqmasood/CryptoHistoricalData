@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+  <form method="post" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <label for="symbol" class="form-label">Symbol</label>
+      <select id="symbol" name="symbol" class="form-select" required>
+        {% for s in symbols %}
+          <option value="{{ s }}" {% if request.form.symbol == s %}selected{% endif %}>
+            {{ s }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="interval" class="form-label">Interval</label>
+      <select id="interval" name="interval" class="form-select" required>
+        {% for i in intervals %}
+          <option value="{{ i }}" {% if request.form.interval == i %}selected{% endif %}>
+            {{ i }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label for="start" class="form-label">Start Date</label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        class="form-control"
+        value="{{ request.form.start }}"
+        required
+      >
+    </div>
+
+    <div class="col-md-3">
+      <label for="end" class="form-label">End Date</label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        class="form-control"
+        value="{{ request.form.end }}"
+        required
+      >
+    </div>
+
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-primary">Plot</button>
+    </div>
+  </form>
+
+  {% if img_data %}
+    <div class="mb-4 text-center">
+      <img
+        src="data:image/png;base64,{{ img_data }}"
+        class="img-fluid rounded border"
+        alt="Price chart"
+      >
+    </div>
+    <a
+      href="{{ url_for('download', csv_name=csv_name) }}"
+      class="btn btn-success"
+    >Download CSV</a>
+  {% endif %}
+{% endblock %}
